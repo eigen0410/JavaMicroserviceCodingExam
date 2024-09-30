@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>RegistrationServiceTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">java (Oct 1, 2024 4:30:46 AM)</a> &gt; <a href="../../index.html" class="el_group">CustomerAccountService</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">com.mycompany.customeraccount.service</a> &gt; <span class="el_source">RegistrationServiceTest.java</span></div><h1>RegistrationServiceTest.java</h1><pre class="source lang-java linenums">package com.mycompany.customeraccount.service;
+
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.ACCOUNT_CREATED_DESC;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.ACCOUNT_TYPE_REQUIRED_DESC;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.ADDRESS1_INVALID_LENGTH;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.ADDRESS1_REQUIRED_DESC;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.ADDRESS2_INVALID_LENGTH;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.EMAIL_INVALID_LENGTH;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.EMAIL_REQUIRED_DESC;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.INVALID_ACCOUNT_TYPE_DESC;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.MOBILE_INVALID_LENGTH;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.MOBILE_REQUIRED_DESC;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.NAME_INVALID_LENGTH;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.NAME_REQUIRED_DESC;
+import static com.mycompany.customeraccount.constants.TestConstants.ACCOUNT_CREATION_REQUEST;
+import static com.mycompany.customeraccount.constants.TestConstants.INVALID_CHAR_LENGTH;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doThrow;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.transaction.TransactionSystemException;
+import com.google.gson.Gson;
+import com.mycompany.customeraccount.model.CustomerAccount;
+import com.mycompany.customeraccount.model.RegistrationRequest;
+import com.mycompany.customeraccount.model.RegistrationResponse;
+import com.mycompany.customeraccount.model.Savings;
+import com.mycompany.customeraccount.repository.CustomerAccountRepository;
+
+/**
+ * The Class RegistrationServiceTest
+ */
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+<span class="fc" id="L46">class RegistrationServiceTest {</span>
+
+  @Mock
+  CustomerAccountRepository accountRepo;
+
+  @InjectMocks
+  RegistrationServiceImpl service;
+
+<span class="fc" id="L54">  private Gson gson = new Gson();</span>
+
+  @BeforeEach
+  void setUp() {
+<span class="fc" id="L58">    ReflectionTestUtils.setField(service, &quot;accountRepo&quot;, accountRepo);</span>
+
+<span class="fc" id="L60">    CustomerAccount customerAccount = new CustomerAccount();</span>
+<span class="fc" id="L61">    customerAccount.setCustomerNumber(10000000);</span>
+<span class="fc" id="L62">    customerAccount.setCustomerName(&quot;Test&quot;);</span>
+<span class="fc" id="L63">    customerAccount.setCustomerName(&quot;09081234567&quot;);</span>
+<span class="fc" id="L64">    customerAccount.setCustomerName(&quot;test12345@gmail.com&quot;);</span>
+<span class="fc" id="L65">    customerAccount.setCustomerName(&quot;test&quot;);</span>
+<span class="fc" id="L66">    customerAccount.setCustomerName(&quot;test&quot;);</span>
+<span class="fc" id="L67">    List&lt;Savings&gt; savingsList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L68">    Savings savings = new Savings();</span>
+<span class="fc" id="L69">    savings.setAccountNumber(10000);</span>
+<span class="fc" id="L70">    savings.setAccountType(&quot;Savings&quot;);</span>
+<span class="fc" id="L71">    savings.setAvailableBalance(0);</span>
+<span class="fc" id="L72">    savingsList.add(savings);</span>
+<span class="fc" id="L73">    customerAccount.setSavings(savingsList);</span>
+
+<span class="fc" id="L75">    Mockito.when(accountRepo.save(ArgumentMatchers.any())).thenReturn(customerAccount);</span>
+<span class="fc" id="L76">  }</span>
+
+  @Test
+  void registerAccount_Success() {
+<span class="fc" id="L80">    RegistrationRequest request =</span>
+<span class="fc" id="L81">        gson.fromJson(ACCOUNT_CREATION_REQUEST, RegistrationRequest.class);</span>
+<span class="fc" id="L82">    RegistrationResponse response = service.registerAccount(request);</span>
+    
+<span class="fc" id="L84">    assertThat(response).isNotNull();</span>
+<span class="fc" id="L85">    assertThat(response.getCustomerNumber()).isEqualTo(10000000);</span>
+<span class="fc" id="L86">    assertThat(response.getTransactionStatusCode()).isEqualTo(HttpStatus.CREATED.value());</span>
+<span class="fc" id="L87">    assertThat(response.getTransactionStatusDescription()).isEqualTo(ACCOUNT_CREATED_DESC);</span>
+<span class="fc" id="L88">  }</span>
+
+  @Test
+  void registerAccount_InvalidAccountType() {
+<span class="fc" id="L92">    RegistrationRequest request =</span>
+<span class="fc" id="L93">        gson.fromJson(ACCOUNT_CREATION_REQUEST, RegistrationRequest.class);</span>
+<span class="fc" id="L94">    request.setAccountType(&quot;INVALID&quot;);</span>
+<span class="fc" id="L95">    RegistrationResponse response = service.registerAccount(request);</span>
+    
+<span class="fc" id="L97">    assertThat(response).isNotNull();</span>
+<span class="fc" id="L98">    assertThat(response.getCustomerNumber()).isNull();</span>
+<span class="fc" id="L99">    assertThat(response.getTransactionStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());</span>
+<span class="fc" id="L100">    assertThat(response.getTransactionStatusDescription()).isEqualTo(INVALID_ACCOUNT_TYPE_DESC);</span>
+<span class="fc" id="L101">  }</span>
+
+  @Test
+  void registerAccount_InvalidNameLength() {
+<span class="fc" id="L105">    RegistrationRequest request =</span>
+<span class="fc" id="L106">        gson.fromJson(ACCOUNT_CREATION_REQUEST, RegistrationRequest.class);</span>
+<span class="fc" id="L107">    request.setCustomerName(INVALID_CHAR_LENGTH);</span>
+<span class="fc" id="L108">    doThrow(new TransactionSystemException(&quot;Error&quot;)).when(accountRepo).save(ArgumentMatchers.any());</span>
+<span class="fc" id="L109">    RegistrationResponse response = service.registerAccount(request);</span>
+    
+<span class="fc" id="L111">    assertThat(response).isNotNull();</span>
+<span class="fc" id="L112">    assertThat(response.getCustomerNumber()).isNull();</span>
+<span class="fc" id="L113">    assertThat(response.getTransactionStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());</span>
+<span class="fc" id="L114">    assertThat(response.getTransactionStatusDescription()).isEqualTo(NAME_INVALID_LENGTH);</span>
+<span class="fc" id="L115">  }</span>
+  
+  @Test
+  void registerAccount_InvalidMobileLength() {
+<span class="fc" id="L119">    RegistrationRequest request =</span>
+<span class="fc" id="L120">        gson.fromJson(ACCOUNT_CREATION_REQUEST, RegistrationRequest.class);</span>
+<span class="fc" id="L121">    request.setCustomerMobile(INVALID_CHAR_LENGTH);</span>
+<span class="fc" id="L122">    doThrow(new TransactionSystemException(&quot;Error&quot;)).when(accountRepo).save(ArgumentMatchers.any());</span>
+<span class="fc" id="L123">    RegistrationResponse response = service.registerAccount(request);</span>
+    
+<span class="fc" id="L125">    assertThat(response).isNotNull();</span>
+<span class="fc" id="L126">    assertThat(response.getCustomerNumber()).isNull();</span>
+<span class="fc" id="L127">    assertThat(response.getTransactionStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());</span>
+<span class="fc" id="L128">    assertThat(response.getTransactionStatusDescription()).isEqualTo(MOBILE_INVALID_LENGTH);</span>
+<span class="fc" id="L129">  }</span>
+  
+  @Test
+  void registerAccount_InvalidEmailLength() {
+<span class="fc" id="L133">    RegistrationRequest request =</span>
+<span class="fc" id="L134">        gson.fromJson(ACCOUNT_CREATION_REQUEST, RegistrationRequest.class);</span>
+<span class="fc" id="L135">    request.setCustomerEmail(INVALID_CHAR_LENGTH);</span>
+<span class="fc" id="L136">    doThrow(new TransactionSystemException(&quot;Error&quot;)).when(accountRepo).save(ArgumentMatchers.any());</span>
+<span class="fc" id="L137">    RegistrationResponse response = service.registerAccount(request);</span>
+    
+<span class="fc" id="L139">    assertThat(response).isNotNull();</span>
+<span class="fc" id="L140">    assertThat(response.getCustomerNumber()).isNull();</span>
+<span class="fc" id="L141">    assertThat(response.getTransactionStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());</span>
+<span class="fc" id="L142">    assertThat(response.getTransactionStatusDescription()).isEqualTo(EMAIL_INVALID_LENGTH);</span>
+<span class="fc" id="L143">  }</span>
+  
+  @Test
+  void registerAccount_InvalidAddress1Length() {
+<span class="fc" id="L147">    RegistrationRequest request =</span>
+<span class="fc" id="L148">        gson.fromJson(ACCOUNT_CREATION_REQUEST, RegistrationRequest.class);</span>
+<span class="fc" id="L149">    request.setAddress1(INVALID_CHAR_LENGTH);</span>
+<span class="fc" id="L150">    doThrow(new TransactionSystemException(&quot;Error&quot;)).when(accountRepo).save(ArgumentMatchers.any());</span>
+<span class="fc" id="L151">    RegistrationResponse response = service.registerAccount(request);</span>
+    
+<span class="fc" id="L153">    assertThat(response).isNotNull();</span>
+<span class="fc" id="L154">    assertThat(response.getCustomerNumber()).isNull();</span>
+<span class="fc" id="L155">    assertThat(response.getTransactionStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());</span>
+<span class="fc" id="L156">    assertThat(response.getTransactionStatusDescription()).isEqualTo(ADDRESS1_INVALID_LENGTH);</span>
+<span class="fc" id="L157">  }</span>
+  
+  @Test
+  void registerAccount_InvalidAddress2Length() {
+<span class="fc" id="L161">    RegistrationRequest request =</span>
+<span class="fc" id="L162">        gson.fromJson(ACCOUNT_CREATION_REQUEST, RegistrationRequest.class);</span>
+<span class="fc" id="L163">    request.setAddress2(INVALID_CHAR_LENGTH);</span>
+<span class="fc" id="L164">    doThrow(new TransactionSystemException(&quot;Error&quot;)).when(accountRepo).save(ArgumentMatchers.any());</span>
+<span class="fc" id="L165">    RegistrationResponse response = service.registerAccount(request);</span>
+    
+<span class="fc" id="L167">    assertThat(response).isNotNull();</span>
+<span class="fc" id="L168">    assertThat(response.getCustomerNumber()).isNull();</span>
+<span class="fc" id="L169">    assertThat(response.getTransactionStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());</span>
+<span class="fc" id="L170">    assertThat(response.getTransactionStatusDescription()).isEqualTo(ADDRESS2_INVALID_LENGTH);</span>
+<span class="fc" id="L171">  }</span>
+
+  @Test
+  void registerAccount_EmptyName() {
+<span class="fc" id="L175">    RegistrationRequest request =</span>
+<span class="fc" id="L176">        gson.fromJson(ACCOUNT_CREATION_REQUEST, RegistrationRequest.class);</span>
+<span class="fc" id="L177">    request.setCustomerName(null);</span>
+<span class="fc" id="L178">    doThrow(new NullPointerException(&quot;Error&quot;)).when(accountRepo).save(ArgumentMatchers.any());</span>
+<span class="fc" id="L179">    RegistrationResponse response = service.registerAccount(request);</span>
+    
+<span class="fc" id="L181">    assertThat(response).isNotNull();</span>
+<span class="fc" id="L182">    assertThat(response.getCustomerNumber()).isNull();</span>
+<span class="fc" id="L183">    assertThat(response.getTransactionStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());</span>
+<span class="fc" id="L184">    assertThat(response.getTransactionStatusDescription()).isEqualTo(NAME_REQUIRED_DESC);</span>
+<span class="fc" id="L185">  }</span>
+  
+  @Test
+  void registerAccount_EmptyMobile() {
+<span class="fc" id="L189">    RegistrationRequest request =</span>
+<span class="fc" id="L190">        gson.fromJson(ACCOUNT_CREATION_REQUEST, RegistrationRequest.class);</span>
+<span class="fc" id="L191">    request.setCustomerMobile(null);</span>
+<span class="fc" id="L192">    doThrow(new NullPointerException(&quot;Error&quot;)).when(accountRepo).save(ArgumentMatchers.any());</span>
+<span class="fc" id="L193">    RegistrationResponse response = service.registerAccount(request);</span>
+    
+<span class="fc" id="L195">    assertThat(response).isNotNull();</span>
+<span class="fc" id="L196">    assertThat(response.getCustomerNumber()).isNull();</span>
+<span class="fc" id="L197">    assertThat(response.getTransactionStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());</span>
+<span class="fc" id="L198">    assertThat(response.getTransactionStatusDescription()).isEqualTo(MOBILE_REQUIRED_DESC);</span>
+<span class="fc" id="L199">  }</span>
+  
+  @Test
+  void registerAccount_EmptyEmail() {
+<span class="fc" id="L203">    RegistrationRequest request =</span>
+<span class="fc" id="L204">        gson.fromJson(ACCOUNT_CREATION_REQUEST, RegistrationRequest.class);</span>
+<span class="fc" id="L205">    request.setCustomerEmail(null);</span>
+<span class="fc" id="L206">    doThrow(new NullPointerException(&quot;Error&quot;)).when(accountRepo).save(ArgumentMatchers.any());</span>
+<span class="fc" id="L207">    RegistrationResponse response = service.registerAccount(request);</span>
+    
+<span class="fc" id="L209">    assertThat(response).isNotNull();</span>
+<span class="fc" id="L210">    assertThat(response.getCustomerNumber()).isNull();</span>
+<span class="fc" id="L211">    assertThat(response.getTransactionStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());</span>
+<span class="fc" id="L212">    assertThat(response.getTransactionStatusDescription()).isEqualTo(EMAIL_REQUIRED_DESC);</span>
+<span class="fc" id="L213">  }</span>
+  
+  @Test
+  void registerAccount_EmptyAddress() {
+<span class="fc" id="L217">    RegistrationRequest request =</span>
+<span class="fc" id="L218">        gson.fromJson(ACCOUNT_CREATION_REQUEST, RegistrationRequest.class);</span>
+<span class="fc" id="L219">    request.setAddress1(null);</span>
+<span class="fc" id="L220">    doThrow(new NullPointerException(&quot;Error&quot;)).when(accountRepo).save(ArgumentMatchers.any());</span>
+<span class="fc" id="L221">    RegistrationResponse response = service.registerAccount(request);</span>
+    
+<span class="fc" id="L223">    assertThat(response).isNotNull();</span>
+<span class="fc" id="L224">    assertThat(response.getCustomerNumber()).isNull();</span>
+<span class="fc" id="L225">    assertThat(response.getTransactionStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());</span>
+<span class="fc" id="L226">    assertThat(response.getTransactionStatusDescription()).isEqualTo(ADDRESS1_REQUIRED_DESC);</span>
+<span class="fc" id="L227">  }</span>
+  
+  @Test
+  void registerAccount_EmptyAccountType() {
+<span class="fc" id="L231">    RegistrationRequest request =</span>
+<span class="fc" id="L232">        gson.fromJson(ACCOUNT_CREATION_REQUEST, RegistrationRequest.class);</span>
+<span class="fc" id="L233">    request.setAccountType(null);</span>
+<span class="fc" id="L234">    RegistrationResponse response = service.registerAccount(request);</span>
+    
+<span class="fc" id="L236">    assertThat(response).isNotNull();</span>
+<span class="fc" id="L237">    assertThat(response.getCustomerNumber()).isNull();</span>
+<span class="fc" id="L238">    assertThat(response.getTransactionStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());</span>
+<span class="fc" id="L239">    assertThat(response.getTransactionStatusDescription()).isEqualTo(ACCOUNT_TYPE_REQUIRED_DESC);</span>
+<span class="fc" id="L240">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span>java (Oct 1, 2024 4:30:46 AM)</div></body></html>

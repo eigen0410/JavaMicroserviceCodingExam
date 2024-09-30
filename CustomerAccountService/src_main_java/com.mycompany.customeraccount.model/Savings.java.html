@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Savings.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">java (Oct 1, 2024 4:30:46 AM)</a> &gt; <a href="../../index.html" class="el_group">CustomerAccountService</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.mycompany.customeraccount.model</a> &gt; <span class="el_source">Savings.java</span></div><h1>Savings.java</h1><pre class="source lang-java linenums">package com.mycompany.customeraccount.model;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+/**
+ * The Class Savings
+ */
+@Entity
+<span class="fc" id="L15">public class Savings {</span>
+  
+  @Id
+  @SequenceGenerator(
+      name = &quot;accnum_sequence&quot;,
+      sequenceName = &quot;accnum_sequence&quot;,
+      initialValue=10000,
+      allocationSize = 1
+  )
+  @GeneratedValue(
+      strategy = GenerationType.SEQUENCE,
+      generator = &quot;accnum_sequence&quot;
+  )
+  /** The account number. */  
+  private long accountNumber;
+  
+  @NotEmpty
+  /** The account type. */  
+  private String accountType;
+  
+  @NotNull
+  /** The available balance. */  
+  private long availableBalance;
+  
+  /**
+   * Gets account number.
+   * 
+   * @return accountNumber the account number
+   */
+  public long getAccountNumber() {
+<span class="nc" id="L45">    return accountNumber;</span>
+  }
+  
+  /**
+   * Sets account number.
+   * 
+   * @param accountNumber the account number
+   */
+  public void setAccountNumber(long accountNumber) {
+<span class="fc" id="L54">    this.accountNumber = accountNumber;</span>
+<span class="fc" id="L55">  }</span>
+  
+  /**
+   * Gets account type.
+   * 
+   * @return accountType the account type
+   */
+  public String getAccountType() {
+<span class="nc" id="L63">    return accountType;</span>
+  }
+  
+  /**
+   * Sets account type.
+   * 
+   * @param accountType the account type
+   */
+  public void setAccountType(String accountType) {
+<span class="fc" id="L72">    this.accountType = accountType;</span>
+<span class="fc" id="L73">  }</span>
+  
+  /**
+   * Gets available balance.
+   * 
+   * @return availableBalance the available balance
+   */
+  public long getAvailableBalance() {
+<span class="nc" id="L81">    return availableBalance;</span>
+  }
+  
+  /**
+   * Sets available balance.
+   * 
+   * @param availableBalance the available balance
+   */
+  public void setAvailableBalance(long availableBalance) {
+<span class="fc" id="L90">    this.availableBalance = availableBalance;</span>
+<span class="fc" id="L91">  }</span>
+  
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span>java (Oct 1, 2024 4:30:46 AM)</div></body></html>

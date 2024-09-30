@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>CustomerAccountController.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">java (Oct 1, 2024 4:30:46 AM)</a> &gt; <a href="../../index.html" class="el_group">CustomerAccountService</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.mycompany.customeraccount.controller</a> &gt; <span class="el_source">CustomerAccountController.java</span></div><h1>CustomerAccountController.java</h1><pre class="source lang-java linenums">package com.mycompany.customeraccount.controller;
+
+import javax.validation.Valid;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import com.mycompany.customeraccount.model.AccountInquiryResponse;
+import com.mycompany.customeraccount.model.RegistrationRequest;
+import com.mycompany.customeraccount.model.RegistrationResponse;
+import com.mycompany.customeraccount.service.InquiryService;
+import com.mycompany.customeraccount.service.RegistrationService;
+
+/**
+ * The Class CustomerAccountController
+ */
+@RestController
+<span class="fc" id="L24">public class CustomerAccountController {</span>
+  
+  /** The Constant LOGGER. */
+<span class="fc" id="L27">  public static final Logger LOGGER = LogManager.getLogger(CustomerAccountController.class);</span>
+
+  /** The registration service. */
+  @Autowired
+  private RegistrationService registrationService;
+
+  /** The inquiry service. */
+  @Autowired
+  private InquiryService inquiryService;
+
+  /**
+   * Gets the customer account information.
+   * 
+   * @param customerNumber the customer number
+   * @return
+   */
+  @GetMapping(path = &quot;/api/v1/account/{customerNumber}&quot;)
+  public ResponseEntity&lt;AccountInquiryResponse&gt; getCustomerAccountInformation(@PathVariable String customerNumber) {
+<span class="fc" id="L45">    AccountInquiryResponse inquiry = inquiryService.inquireAccount(customerNumber);</span>
+<span class="fc" id="L46">    ResponseEntity&lt;AccountInquiryResponse&gt; response = null;</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">    if(HttpStatus.FOUND.value() == inquiry.getTransactionStatusCode()) {</span>
+<span class="fc" id="L48">      response = new ResponseEntity&lt;&gt;(inquiry, HttpStatus.FOUND);</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">    } else if (HttpStatus.NOT_FOUND.value() == inquiry.getTransactionStatusCode()) {</span>
+<span class="fc" id="L50">      response = new ResponseEntity&lt;&gt;(inquiry, HttpStatus.NOT_FOUND);</span>
+    } 
+<span class="fc" id="L52">    return response;</span>
+  }
+
+  /**
+   * Creates the customer account.
+   * 
+   * @param request the request
+   * @return
+   */
+  @PostMapping(&quot;/api/v1/account&quot;)
+  public ResponseEntity&lt;RegistrationResponse&gt; createCustomerAccount(@Valid @RequestBody RegistrationRequest request) {
+<span class="fc" id="L63">    RegistrationResponse registration = registrationService.registerAccount(request);</span>
+<span class="fc" id="L64">    ResponseEntity&lt;RegistrationResponse&gt; response = null;</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">    if(HttpStatus.CREATED.value() == registration.getTransactionStatusCode()) {</span>
+<span class="fc" id="L66">      response = new ResponseEntity&lt;&gt;(registration, HttpStatus.CREATED);</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">    } else if (HttpStatus.BAD_REQUEST.value() == registration.getTransactionStatusCode()) {</span>
+<span class="fc" id="L68">      response = new ResponseEntity&lt;&gt;(registration, HttpStatus.BAD_REQUEST);</span>
+    } 
+<span class="fc" id="L70">    return response;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span>java (Oct 1, 2024 4:30:46 AM)</div></body></html>

@@ -1,5 +1,23 @@
 package com.mycompany.customeraccount.service;
 
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.ACCOUNT_CREATED_DESC;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.ACCOUNT_SUCCESSFULLY_CREATED;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.ACCOUNT_TYPE_REQUIRED_DESC;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.ADDRESS1_INVALID_LENGTH;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.ADDRESS1_REQUIRED_DESC;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.ADDRESS2_INVALID_LENGTH;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.EMAIL_INVALID_LENGTH;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.EMAIL_REQUIRED_DESC;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.INVALID_ACCOUNT_TYPE_DESC;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.INVALID_ACCOUNT_TYPE_MESSAGE;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.MAX_ADDRESS_CHAR_LENGTH;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.MAX_CUSTOMER_CHAR_LENGTH;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.MAX_EMAIL_CHAR_LENGTH;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.MAX_MOBILE_CHAR_LENGTH;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.MOBILE_INVALID_LENGTH;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.MOBILE_REQUIRED_DESC;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.NAME_INVALID_LENGTH;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.NAME_REQUIRED_DESC;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.EnumUtils;
@@ -11,7 +29,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
 import com.mycompany.customeraccount.constants.AccountTypeEnum;
-import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.*;
 import com.mycompany.customeraccount.model.CustomerAccount;
 import com.mycompany.customeraccount.model.RegistrationRequest;
 import com.mycompany.customeraccount.model.RegistrationResponse;
@@ -42,6 +59,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     CustomerAccount customerAccount = new CustomerAccount();
     RegistrationResponse response = new RegistrationResponse();
     try {
+      if(this.isRequestFieldsEmpty(request)) {
+        throw new NullPointerException("Empty Field");
+      }
       customerAccount.setCustomerName(request.getCustomerName());
       customerAccount.setCustomerMobile(request.getCustomerMobile());
       customerAccount.setCustomerEmail(request.getCustomerEmail());
@@ -58,7 +78,11 @@ public class RegistrationServiceImpl implements RegistrationService {
         LOGGER.info(INVALID_ACCOUNT_TYPE_MESSAGE, accType);
         response.setCustomerNumber(null);
         response.setTransactionStatusCode(HttpStatus.BAD_REQUEST.value());
-        response.setTransactionStatusDescription(INVALID_ACCOUNT_TYPE_DESC);
+        if (StringUtils.isEmpty(accType)) {
+          response.setTransactionStatusDescription(ACCOUNT_TYPE_REQUIRED_DESC);
+        } else {
+          response.setTransactionStatusDescription(INVALID_ACCOUNT_TYPE_DESC);
+        }
         return response;
       }
       
@@ -90,6 +114,21 @@ public class RegistrationServiceImpl implements RegistrationService {
   }
   
   /**
+   * Checks for missing field.
+   * 
+   * @param request the request
+   * @return boolean the boolean
+   */
+  private boolean isRequestFieldsEmpty(RegistrationRequest request) {
+    if (StringUtils.isEmpty(request.getCustomerName()) || StringUtils.isEmpty(request.getCustomerMobile())
+        || StringUtils.isEmpty(request.getCustomerEmail()) || StringUtils.isEmpty(request.getAddress1())) {
+      return true;
+    }
+    
+    return false;
+  }
+  
+  /**
    * Sets status description for missing field.
    * 
    * @param request the request
@@ -105,9 +144,7 @@ public class RegistrationServiceImpl implements RegistrationService {
       response.setTransactionStatusDescription(EMAIL_REQUIRED_DESC);
     } else if (StringUtils.isEmpty(request.getAddress1())) {
       response.setTransactionStatusDescription(ADDRESS1_REQUIRED_DESC);
-    } else if (null == request.getAccountType()) {
-      response.setTransactionStatusDescription(ACCOUNT_TYPE_REQUIRED_DESC);
-    }
+    } 
     
     return response;
   }
@@ -129,7 +166,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     } else if (request.getAddress1().length() > MAX_ADDRESS_CHAR_LENGTH) {
       response.setTransactionStatusDescription(ADDRESS1_INVALID_LENGTH);
     } else if (request.getAddress2().length() > MAX_ADDRESS_CHAR_LENGTH) {
-      response.setTransactionStatusDescription(ADDESS2_INVALID_LENGTH);
+      response.setTransactionStatusDescription(ADDRESS2_INVALID_LENGTH);
     }  
     
     return response;

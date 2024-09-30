@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>CustomerAccount.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">java (Oct 1, 2024 4:30:46 AM)</a> &gt; <a href="../../index.html" class="el_group">CustomerAccountService</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.mycompany.customeraccount.model</a> &gt; <span class="el_source">CustomerAccount.java</span></div><h1>CustomerAccount.java</h1><pre class="source lang-java linenums">package com.mycompany.customeraccount.model;
+
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
+/**
+ * The Class CustomerAccount
+ */
+@Entity
+<span class="fc" id="L19">public class CustomerAccount {</span>
+
+  @Id
+  @SequenceGenerator(
+      name = &quot;custnum_sequence&quot;,
+      sequenceName = &quot;custnum_sequence&quot;,
+      initialValue=10000000,
+      allocationSize = 1
+  )
+  @GeneratedValue(
+      strategy = GenerationType.SEQUENCE,
+      generator = &quot;custnum_sequence&quot;
+  )
+  /** The customer number. */ 
+  private long customerNumber;
+  
+  @NotEmpty
+  @Size(max=50)
+  /** The customer name. */ 
+  private String customerName;
+  @NotEmpty
+  @Size(max=20)
+  /** The customer number. */ 
+  private String customerMobile;
+  @NotEmpty
+  @Size(max=50)
+  /** The customer email. */ 
+  private String customerEmail;
+  @NotEmpty
+  @Size(max=100)
+  /** The address 1. */ 
+  private String address1;
+  @Size(max=100)
+  /** The address 2. */ 
+  private String address2;
+  
+  @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+  /** The savings. */ 
+  private List&lt;Savings&gt; savings;
+  
+  /**
+   * Gets customer number.
+   * 
+   * @return customerNumber the customer number
+   */
+  public long getCustomerNumber() {
+<span class="fc" id="L65">    return customerNumber;</span>
+  }
+  
+  /**
+   * Sets customer number.
+   * 
+   * @param customerNumber the customer number
+   */
+  public void setCustomerNumber(long customerNumber) {
+<span class="fc" id="L74">    this.customerNumber = customerNumber;</span>
+<span class="fc" id="L75">  }</span>
+  
+  /**
+   * Gets customer name.
+   * 
+   * @return customerName the customer name
+   */
+  public String getCustomerName() {
+<span class="nc" id="L83">    return customerName;</span>
+  }
+  
+  /**
+   * Sets customer name.
+   * 
+   * @param customerName the customer name
+   */
+  public void setCustomerName(String customerName) {
+<span class="fc" id="L92">    this.customerName = customerName;</span>
+<span class="fc" id="L93">  }</span>
+  
+  /**
+   * Gets customer mobile.
+   * 
+   * @return customerMobile the customer mobile
+   */
+  public String getCustomerMobile() {
+<span class="nc" id="L101">    return customerMobile;</span>
+  }
+  
+  /**
+   * Sets customer mobile.
+   * 
+   * @param customerMobile the customer mobile
+   */
+  public void setCustomerMobile(String customerMobile) {
+<span class="fc" id="L110">    this.customerMobile = customerMobile;</span>
+<span class="fc" id="L111">  }</span>
+  
+  /**
+   * Gets customer email.
+   * 
+   * @return customerEmail the customer email
+   */
+  public String getCustomerEmail() {
+<span class="nc" id="L119">    return customerEmail;</span>
+  }
+  
+  /**
+   * Sets customer email.
+   * 
+   * @param customerEmail the customer email
+   */
+  public void setCustomerEmail(String customerEmail) {
+<span class="fc" id="L128">    this.customerEmail = customerEmail;</span>
+<span class="fc" id="L129">  }</span>
+
+  /**
+   * Gets address 1.
+   * 
+   * @return address1 the address
+   */
+  public String getAddress1() {
+<span class="nc" id="L137">    return address1;</span>
+  }
+  
+  /**
+   * Sets address 1.
+   * 
+   * @param address1 the address 1
+   */
+  public void setAddress1(String address1) {
+<span class="fc" id="L146">    this.address1 = address1;</span>
+<span class="fc" id="L147">  }</span>
+
+  /**
+   * Gets address 2.
+   * 
+   * @return address2 the address
+   */
+  public String getAddress2() {
+<span class="nc" id="L155">    return address2;</span>
+  }
+  
+  /**
+   * Sets account type.
+   * 
+   * @param accountType the account type
+   */
+  public void setAddress2(String address2) {
+<span class="fc" id="L164">    this.address2 = address2;</span>
+<span class="fc" id="L165">  }</span>
+
+  /**
+   * Gets savings.
+   * 
+   * @return savings the savings
+   */
+  public List&lt;Savings&gt; getSavings() {
+<span class="nc" id="L173">    return savings;</span>
+  }
+
+  
+  /**
+   * Sets savings.
+   * 
+   * @param savings the savings
+   */
+  public void setSavings(List&lt;Savings&gt; savings) {
+<span class="fc" id="L183">    this.savings = savings;</span>
+<span class="fc" id="L184">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span>java (Oct 1, 2024 4:30:46 AM)</div></body></html>

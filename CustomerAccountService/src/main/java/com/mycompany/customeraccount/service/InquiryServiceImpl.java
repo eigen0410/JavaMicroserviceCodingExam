@@ -1,12 +1,13 @@
 package com.mycompany.customeraccount.service;
 
+import static com.mycompany.customeraccount.constants.InquiryServiceConstants.CUSTOMER_ACCOUNT_FOUND;
+import static com.mycompany.customeraccount.constants.InquiryServiceConstants.CUSTOMER_NOT_FOUND;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import static com.mycompany.customeraccount.constants.InquiryServiceConstants.*;
 import com.mycompany.customeraccount.model.AccountInquiryResponse;
 import com.mycompany.customeraccount.model.CustomerAccount;
 import com.mycompany.customeraccount.repository.CustomerAccountRepository;
@@ -34,8 +35,8 @@ public class InquiryServiceImpl implements InquiryService{
   @Override
   public AccountInquiryResponse inquireAccount(String customerNumber) {
     AccountInquiryResponse response = new AccountInquiryResponse();
-    Long custNum = Long.valueOf(customerNumber);
     try {
+      Long custNum = Long.valueOf(customerNumber);
       Optional<CustomerAccount> idFound =
           accountRepo.findById(custNum);
        if (idFound.isPresent()) {

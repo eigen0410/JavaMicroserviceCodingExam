@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>TestConstants.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">java (Oct 1, 2024 4:30:46 AM)</a> &gt; <a href="../../index.html" class="el_group">CustomerAccountService</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">com.mycompany.customeraccount.constants</a> &gt; <span class="el_source">TestConstants.java</span></div><h1>TestConstants.java</h1><pre class="source lang-java linenums">package com.mycompany.customeraccount.constants;
+
+/**
+ * The Class TestConstants
+ */
+<span class="nc" id="L6">public final class TestConstants {</span>
+  
+  public static final String ACCOUNT_INQUIRY_SUCCESS = &quot;{\r\n&quot;
+      + &quot;    \&quot;customerAccount\&quot;: {\r\n&quot;
+      + &quot;        \&quot;customerNumber\&quot;: 10000000,\r\n&quot;
+      + &quot;        \&quot;customerName\&quot;: \&quot;Test\&quot;,\r\n&quot;
+      + &quot;        \&quot;customerMobile\&quot;: \&quot;09081234567\&quot;,\r\n&quot;
+      + &quot;        \&quot;customerEmail\&quot;: \&quot;test12345@gmail.com\&quot;,\r\n&quot;
+      + &quot;        \&quot;address1\&quot;: \&quot;test\&quot;,\r\n&quot;
+      + &quot;        \&quot;address2\&quot;: \&quot;test\&quot;,\r\n&quot;
+      + &quot;        \&quot;savings\&quot;: [\r\n&quot;
+      + &quot;            {\r\n&quot;
+      + &quot;                \&quot;accountNumber\&quot;: 10000,\r\n&quot;
+      + &quot;                \&quot;accountType\&quot;: \&quot;Savings\&quot;,\r\n&quot;
+      + &quot;                \&quot;availableBalance\&quot;: 0\r\n&quot;
+      + &quot;            }\r\n&quot;
+      + &quot;        ]\r\n&quot;
+      + &quot;    },\r\n&quot;
+      + &quot;    \&quot;transactionStatusCode\&quot;: 302,\r\n&quot;
+      + &quot;    \&quot;transactionStatusDescription\&quot;: \&quot;Customer Account found\&quot;\r\n&quot;
+      + &quot;}&quot;;
+  
+  public static final String ACCOUNT_INQUIRY_FAILED = &quot;{\r\n&quot;
+      + &quot;    \&quot;transactionStatusCode\&quot;: 404,\r\n&quot;
+      + &quot;    \&quot;transactionStatusDescription\&quot;: \&quot;Customer not found\&quot;\r\n&quot;
+      + &quot;}&quot;;
+  
+  public static final String ACCOUNT_CREATION_SUCCESS = &quot;{\r\n&quot;
+      + &quot;    \&quot;customerNumber\&quot;: 10000000,\r\n&quot;
+      + &quot;    \&quot;transactionStatusCode\&quot;: 201,\r\n&quot;
+      + &quot;    \&quot;transactionStatusDescription\&quot;: \&quot;Customer account created\&quot;\r\n&quot;
+      + &quot;}&quot;;
+  
+  public static final String ACCOUNT_CREATION_FAILED = &quot;{\r\n&quot;
+      + &quot;    \&quot;transactionStatusCode\&quot;: 400,\r\n&quot;
+      + &quot;    \&quot;transactionStatusDescription\&quot;: \&quot;Email is required field\&quot;\r\n&quot;
+      + &quot;}&quot;;
+  
+  public static final String ACCOUNT_CREATION_REQUEST = &quot;{\r\n&quot;
+      + &quot;   \&quot;customerName\&quot;:\&quot;Test\&quot;,\r\n&quot;
+      + &quot;   \&quot;customerMobile\&quot;:\&quot;09081234567\&quot;,\r\n&quot;
+      + &quot;   \&quot;customerEmail\&quot;: \&quot;test12345@gmail.com\&quot;,\r\n&quot;
+      + &quot;   \&quot;address1\&quot;:\&quot;test\&quot;,\r\n&quot;
+      + &quot;   \&quot;address2\&quot;:\&quot;test\&quot;,\r\n&quot;
+      + &quot;   \&quot;accountType\&quot;: \&quot;S\&quot;\r\n&quot;
+      + &quot;}&quot;;
+  
+  public static final String INVALID_CHAR_LENGTH = &quot;testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest&quot;;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span>java (Oct 1, 2024 4:30:46 AM)</div></body></html>

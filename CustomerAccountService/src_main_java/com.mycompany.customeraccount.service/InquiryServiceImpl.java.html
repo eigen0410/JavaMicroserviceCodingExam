@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>InquiryServiceImpl.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">java (Oct 1, 2024 4:30:46 AM)</a> &gt; <a href="../../index.html" class="el_group">CustomerAccountService</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.mycompany.customeraccount.service</a> &gt; <span class="el_source">InquiryServiceImpl.java</span></div><h1>InquiryServiceImpl.java</h1><pre class="source lang-java linenums">package com.mycompany.customeraccount.service;
+
+import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import static com.mycompany.customeraccount.constants.InquiryServiceConstants.*;
+import com.mycompany.customeraccount.model.AccountInquiryResponse;
+import com.mycompany.customeraccount.model.CustomerAccount;
+import com.mycompany.customeraccount.repository.CustomerAccountRepository;
+
+/**
+ * The Class InquiryServiceImpl
+ */
+@Service
+<span class="fc" id="L18">public class InquiryServiceImpl implements InquiryService{</span>
+  
+  /** The Constant LOGGER. */
+<span class="fc" id="L21">  public static final Logger LOGGER = LogManager.getLogger(RegistrationServiceImpl.class);</span>
+
+
+  /** The customer account repository. */  
+  @Autowired
+  private CustomerAccountRepository accountRepo;
+  
+  /**
+   * Inquiries the customer account.
+   * 
+   * @param customerNumber the customer number
+   * @return AccountInquiryResponse the account inquiry response
+   */
+  @Override
+  public AccountInquiryResponse inquireAccount(String customerNumber) {
+<span class="fc" id="L36">    AccountInquiryResponse response = new AccountInquiryResponse();</span>
+    try {
+<span class="fc" id="L38">      Long custNum = Long.valueOf(customerNumber);</span>
+<span class="fc" id="L39">      Optional&lt;CustomerAccount&gt; idFound =</span>
+<span class="fc" id="L40">          accountRepo.findById(custNum);</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">       if (idFound.isPresent()) {</span>
+<span class="fc" id="L42">         LOGGER.info(CUSTOMER_ACCOUNT_FOUND);</span>
+<span class="fc" id="L43">         CustomerAccount customer = idFound.get();</span>
+<span class="fc" id="L44">         response.setCustomerAccount(customer);</span>
+<span class="fc" id="L45">         response.setTransactionStatusCode(HttpStatus.FOUND.value());</span>
+<span class="fc" id="L46">         response.setTransactionStatusDescription(CUSTOMER_ACCOUNT_FOUND);</span>
+<span class="fc" id="L47">         return response;</span>
+       } else {
+<span class="fc" id="L49">         LOGGER.info(CUSTOMER_NOT_FOUND);</span>
+<span class="fc" id="L50">         response.setCustomerAccount(null);</span>
+<span class="fc" id="L51">         response.setTransactionStatusCode(HttpStatus.NOT_FOUND.value());</span>
+<span class="fc" id="L52">         response.setTransactionStatusDescription(CUSTOMER_NOT_FOUND);</span>
+<span class="fc" id="L53">         return response;</span>
+       }
+<span class="fc" id="L55">    } catch (Exception e) {</span>
+<span class="fc" id="L56">      LOGGER.info(e.getMessage());</span>
+<span class="fc" id="L57">      response.setCustomerAccount(null);</span>
+<span class="fc" id="L58">      response.setTransactionStatusCode(HttpStatus.NOT_FOUND.value());</span>
+<span class="fc" id="L59">      response.setTransactionStatusDescription(CUSTOMER_NOT_FOUND);</span>
+<span class="fc" id="L60">      return response;</span>
+    }
+  }
+  
+  
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span>java (Oct 1, 2024 4:30:46 AM)</div></body></html>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>AccountInquiryResponse.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">java (Oct 1, 2024 4:30:46 AM)</a> &gt; <a href="../../index.html" class="el_group">CustomerAccountService</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.mycompany.customeraccount.model</a> &gt; <span class="el_source">AccountInquiryResponse.java</span></div><h1>AccountInquiryResponse.java</h1><pre class="source lang-java linenums">package com.mycompany.customeraccount.model;
+
+import org.springframework.lang.Nullable;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+/**
+ * The Class AccountInquiryResponse
+ */
+@JsonInclude(Include.NON_EMPTY)
+<span class="fc" id="L11">public class AccountInquiryResponse {</span>
+  
+  @Nullable
+  /** The customer account. */
+  private CustomerAccount customerAccount;
+  
+  /** The transaction status code. */
+  private int transactionStatusCode;
+  
+  /** The transaction status description. */
+  private String transactionStatusDescription;
+
+  /**
+   * Gets customer account.
+   * 
+   * @return customerAccount the customer account
+   */
+  public CustomerAccount getCustomerAccount() {
+<span class="fc" id="L29">    return customerAccount;</span>
+  }
+  
+  /**
+   * Sets customer account.
+   * 
+   * @param customerAccount the customer account
+   */
+  public void setCustomerAccount(CustomerAccount customerAccount) {
+<span class="fc" id="L38">    this.customerAccount = customerAccount;</span>
+<span class="fc" id="L39">  }</span>
+
+  /**
+   * Gets transaction status code.
+   * 
+   * @return transactionStatusCode the transaction status code
+   */
+  public int getTransactionStatusCode() {
+<span class="fc" id="L47">    return transactionStatusCode;</span>
+  }
+  
+  /**
+   * Sets transaction status code.
+   * 
+   * @param transactionStatusCode the transaction status code
+   */
+  public void setTransactionStatusCode(int transactionStatusCode) {
+<span class="fc" id="L56">    this.transactionStatusCode = transactionStatusCode;</span>
+<span class="fc" id="L57">  }</span>
+
+  /**
+   * Gets transaction status description.
+   * 
+   * @return transactionStatusDescription the transaction status description
+   */
+  public String getTransactionStatusDescription() {
+<span class="fc" id="L65">    return transactionStatusDescription;</span>
+  }
+  
+  /**
+   * Sets transaction status description.
+   * 
+   * @param transactionStatusDescription the transaction status description
+   */
+  public void setTransactionStatusDescription(String transactionStatusDescription) {
+<span class="fc" id="L74">    this.transactionStatusDescription = transactionStatusDescription;</span>
+<span class="fc" id="L75">  }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span>java (Oct 1, 2024 4:30:46 AM)</div></body></html>

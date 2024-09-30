@@ -18,7 +18,7 @@ public final class RegistrationServiceConstants {
   public static final String MOBILE_INVALID_LENGTH = "Mobile exceeded the required length";
   public static final String EMAIL_INVALID_LENGTH = "Email exceeded the required length";
   public static final String ADDRESS1_INVALID_LENGTH = "Address1 exceeded the required length";
-  public static final String ADDESS2_INVALID_LENGTH = "Address2 exceeded the required length";
+  public static final String ADDRESS2_INVALID_LENGTH = "Address2 exceeded the required length";
   public static final int MAX_CUSTOMER_CHAR_LENGTH = 50;
   public static final int MAX_MOBILE_CHAR_LENGTH = 20;
   public static final int MAX_EMAIL_CHAR_LENGTH = 50;

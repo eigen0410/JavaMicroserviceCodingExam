@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>RegistrationServiceImpl.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">java (Oct 1, 2024 4:30:46 AM)</a> &gt; <a href="../../index.html" class="el_group">CustomerAccountService</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.mycompany.customeraccount.service</a> &gt; <span class="el_source">RegistrationServiceImpl.java</span></div><h1>RegistrationServiceImpl.java</h1><pre class="source lang-java linenums">package com.mycompany.customeraccount.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionSystemException;
+import com.mycompany.customeraccount.constants.AccountTypeEnum;
+import static com.mycompany.customeraccount.constants.RegistrationServiceConstants.*;
+import com.mycompany.customeraccount.model.CustomerAccount;
+import com.mycompany.customeraccount.model.RegistrationRequest;
+import com.mycompany.customeraccount.model.RegistrationResponse;
+import com.mycompany.customeraccount.model.Savings;
+import com.mycompany.customeraccount.repository.CustomerAccountRepository;
+
+/**
+ * The Class RegistrationServiceImpl
+ */
+@Service
+<span class="fc" id="L25">public class RegistrationServiceImpl implements RegistrationService {</span>
+  
+  /** The Constant LOGGER. */
+<span class="fc" id="L28">  public static final Logger LOGGER = LogManager.getLogger(RegistrationServiceImpl.class);</span>
+  
+  /** The customer account repository. */  
+  @Autowired
+  private CustomerAccountRepository accountRepo;
+  
+  /**
+   * Registers new customer account.
+   * 
+   * @param request the request
+   * @return RegistrationResponse the registration response
+   */
+  @Override
+  public RegistrationResponse registerAccount(RegistrationRequest request) {
+<span class="fc" id="L42">    CustomerAccount customerAccount = new CustomerAccount();</span>
+<span class="fc" id="L43">    RegistrationResponse response = new RegistrationResponse();</span>
+    try {
+<span class="fc" id="L45">      customerAccount.setCustomerName(request.getCustomerName());</span>
+<span class="fc" id="L46">      customerAccount.setCustomerMobile(request.getCustomerMobile());</span>
+<span class="fc" id="L47">      customerAccount.setCustomerEmail(request.getCustomerEmail());</span>
+<span class="fc" id="L48">      customerAccount.setAddress1(request.getAddress1());</span>
+<span class="fc" id="L49">      customerAccount.setAddress2(request.getAddress2());</span>
+      
+<span class="fc" id="L51">      List&lt;Savings&gt; savingsList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L52">      Savings savings = new Savings();</span>
+<span class="fc" id="L53">      String accType = request.getAccountType();</span>
+      
+<span class="fc bfc" id="L55" title="All 2 branches covered.">      if (EnumUtils.isValidEnum(AccountTypeEnum.class, accType)) {</span>
+<span class="fc" id="L56">        savings.setAccountType(AccountTypeEnum.valueOf(accType).getType());</span>
+<span class="fc" id="L57">      } else {</span>
+<span class="fc" id="L58">        LOGGER.info(INVALID_ACCOUNT_TYPE_MESSAGE, accType);</span>
+<span class="fc" id="L59">        response.setCustomerNumber(null);</span>
+<span class="fc" id="L60">        response.setTransactionStatusCode(HttpStatus.BAD_REQUEST.value());</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (StringUtils.isEmpty(accType)) {</span>
+<span class="fc" id="L62">          response.setTransactionStatusDescription(ACCOUNT_TYPE_REQUIRED_DESC);</span>
+<span class="fc" id="L63">        } else {</span>
+<span class="fc" id="L64">          response.setTransactionStatusDescription(INVALID_ACCOUNT_TYPE_DESC);</span>
+        }
+<span class="fc" id="L66">        return response;</span>
+      }
+      
+<span class="fc" id="L69">      savings.setAvailableBalance(0);</span>
+<span class="fc" id="L70">      savingsList.add(savings);</span>
+<span class="fc" id="L71">      customerAccount.setSavings(savingsList);</span>
+
+<span class="fc" id="L73">      CustomerAccount createdAccount = accountRepo.save(customerAccount);</span>
+      
+<span class="fc" id="L75">      response.setCustomerNumber(createdAccount.getCustomerNumber());</span>
+<span class="fc" id="L76">      response.setTransactionStatusCode(HttpStatus.CREATED.value());</span>
+<span class="fc" id="L77">      response.setTransactionStatusDescription(ACCOUNT_CREATED_DESC);</span>
+<span class="fc" id="L78">      LOGGER.info(ACCOUNT_SUCCESSFULLY_CREATED, createdAccount.getCustomerNumber());</span>
+      
+<span class="fc" id="L80">      return response;</span>
+<span class="fc" id="L81">    } catch (TransactionSystemException e) {</span>
+<span class="fc" id="L82">      LOGGER.info(e.getMessage());</span>
+<span class="fc" id="L83">      response.setCustomerNumber(null);</span>
+<span class="fc" id="L84">      response.setTransactionStatusCode(HttpStatus.BAD_REQUEST.value());</span>
+<span class="fc" id="L85">      this.setStatusDescForFieldsWithInvalidLength(request, response);</span>
+<span class="fc" id="L86">      return response;</span>
+<span class="fc" id="L87">    } catch (Exception e) {</span>
+<span class="fc" id="L88">      LOGGER.info(e.getMessage());</span>
+<span class="fc" id="L89">      response.setCustomerNumber(null);</span>
+<span class="fc" id="L90">      response.setTransactionStatusCode(HttpStatus.BAD_REQUEST.value());</span>
+<span class="fc" id="L91">      this.setStatusDescForMissingField(request, response);</span>
+<span class="fc" id="L92">      return response;</span>
+    }
+  }
+  
+  /**
+   * Sets status description for missing field.
+   * 
+   * @param request the request
+   * @param response the response 
+   * @return response the response
+   */
+  private RegistrationResponse setStatusDescForMissingField(RegistrationRequest request, RegistrationResponse response) {
+<span class="fc bfc" id="L104" title="All 2 branches covered.">    if (StringUtils.isEmpty(request.getCustomerName())) {</span>
+<span class="fc" id="L105">      response.setTransactionStatusDescription(NAME_REQUIRED_DESC);</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">    } else if (StringUtils.isEmpty(request.getCustomerMobile())) {</span>
+<span class="fc" id="L107">      response.setTransactionStatusDescription(MOBILE_REQUIRED_DESC);</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">    } else if (StringUtils.isEmpty(request.getCustomerEmail())) {</span>
+<span class="fc" id="L109">      response.setTransactionStatusDescription(EMAIL_REQUIRED_DESC);</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">    } else if (StringUtils.isEmpty(request.getAddress1())) {</span>
+<span class="fc" id="L111">      response.setTransactionStatusDescription(ADDRESS1_REQUIRED_DESC);</span>
+    } 
+    
+<span class="fc" id="L114">    return response;</span>
+  }
+  
+  /**
+   * Sets status description for fields with invalid length.
+   * 
+   * @param request the request
+   * @param response the response 
+   * @return response the response
+   */
+  private RegistrationResponse setStatusDescForFieldsWithInvalidLength(RegistrationRequest request, RegistrationResponse response) {
+<span class="fc bfc" id="L125" title="All 2 branches covered.">    if (request.getCustomerName().length() &gt; MAX_CUSTOMER_CHAR_LENGTH) {</span>
+<span class="fc" id="L126">      response.setTransactionStatusDescription(NAME_INVALID_LENGTH);</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">    } else if (request.getCustomerMobile().length() &gt; MAX_MOBILE_CHAR_LENGTH) {</span>
+<span class="fc" id="L128">      response.setTransactionStatusDescription(MOBILE_INVALID_LENGTH);</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">    } else if (request.getCustomerEmail().length() &gt; MAX_EMAIL_CHAR_LENGTH) {</span>
+<span class="fc" id="L130">      response.setTransactionStatusDescription(EMAIL_INVALID_LENGTH);</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">    } else if (request.getAddress1().length() &gt; MAX_ADDRESS_CHAR_LENGTH) {</span>
+<span class="fc" id="L132">      response.setTransactionStatusDescription(ADDRESS1_INVALID_LENGTH);</span>
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">    } else if (request.getAddress2().length() &gt; MAX_ADDRESS_CHAR_LENGTH) {</span>
+<span class="fc" id="L134">      response.setTransactionStatusDescription(ADDRESS2_INVALID_LENGTH);</span>
+    }  
+    
+<span class="fc" id="L137">    return response;</span>
+  }
+  
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span>java (Oct 1, 2024 4:30:46 AM)</div></body></html>
