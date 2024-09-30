@@ -5,17 +5,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
- * The Class CustomerAccountResponse
+ * The Class AccountInquiryResponse
  */
 @JsonInclude(Include.NON_EMPTY)
-public class CustomerAccountResponse {
+public class AccountInquiryResponse {
   
   @Nullable
   /** The customer account. */
   private CustomerAccount customerAccount;
   
   /** The transaction status code. */
-  private String transactionStatusCode;
+  private int transactionStatusCode;
   
   /** The transaction status description. */
   private String transactionStatusDescription;
@@ -43,7 +43,7 @@ public class CustomerAccountResponse {
    * 
    * @return transactionStatusCode the transaction status code
    */
-  public String getTransactionStatusCode() {
+  public int getTransactionStatusCode() {
     return transactionStatusCode;
   }
   
@@ -52,7 +52,7 @@ public class CustomerAccountResponse {
    * 
    * @param transactionStatusCode the transaction status code
    */
-  public void setTransactionStatusCode(String transactionStatusCode) {
+  public void setTransactionStatusCode(int transactionStatusCode) {
     this.transactionStatusCode = transactionStatusCode;
   }
 

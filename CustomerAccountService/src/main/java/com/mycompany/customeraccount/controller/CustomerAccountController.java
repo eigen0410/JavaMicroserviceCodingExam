@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.mycompany.customeraccount.model.CustomerAccountResponse;
+import com.mycompany.customeraccount.model.AccountInquiryResponse;
 import com.mycompany.customeraccount.model.RegistrationRequest;
 import com.mycompany.customeraccount.model.RegistrationResponse;
+import com.mycompany.customeraccount.service.InquiryService;
 import com.mycompany.customeraccount.service.RegistrationService;
 
 /**
@@ -29,6 +30,10 @@ public class CustomerAccountController {
   @Autowired
   private RegistrationService registrationService;
 
+  /** The inquiry service. */
+  @Autowired
+  private InquiryService inquiryService;
+
   /**
    * Gets the customer account information.
    * 
@@ -36,8 +41,14 @@ public class CustomerAccountController {
    * @return
    */
   @GetMapping(path = "/api/v1/account/{customerNumber}")
-  public ResponseEntity<CustomerAccountResponse> getCustomerAccountInformation(@PathVariable String customerNumber) {
-    ResponseEntity<CustomerAccountResponse> response = null;
+  public ResponseEntity<AccountInquiryResponse> getCustomerAccountInformation(@PathVariable String customerNumber) {
+    AccountInquiryResponse inquiry = inquiryService.inquireAccount(customerNumber);
+    ResponseEntity<AccountInquiryResponse> response = null;
+    if(HttpStatus.FOUND.value() == inquiry.getTransactionStatusCode()) {
+      response = new ResponseEntity<>(inquiry, HttpStatus.FOUND);
+    } else if (HttpStatus.NOT_FOUND.value() == inquiry.getTransactionStatusCode()) {
+      response = new ResponseEntity<>(inquiry, HttpStatus.NOT_FOUND);
+    } 
     return response;
   }
 
